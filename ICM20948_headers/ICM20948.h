@@ -48,8 +48,9 @@
 // void ICM20948_setGyroscopeSensitivity(int sensitivityEnum);
 // void ICM20948_setMagnetometerDataSize(bool is16Bit);
 
-void ICM20948_isDeviceReady(I2C_HandleTypeDef * hi2c, GPIO_TypeDef * GPIOx, uint16_t GPIO_Pin);
+uint8_t ICM20948_IsI2cAddress1(I2C_HandleTypeDef * hi2c);
+uint8_t ICM20948_IsI2cAddress2(I2C_HandleTypeDef * hi2c);
 void ICM20948_init(I2C_HandleTypeDef * hi2c, bool altI2CAddr);
-void ICM20948_getGryoReading(I2C_HandleTypeDef * hi2c, bool altI2CAddr);
-void ICM20948_getAccelReading(I2C_HandleTypeDef * hi2c, bool altI2CAddr);
+void ICM20948_getGryoReading(I2C_HandleTypeDef * hi2c, bool altI2CAddr, uint8_t selectGyroSensitivity);
+void ICM20948_getAccelReading(I2C_HandleTypeDef * hi2c, bool altI2CAddr, uint8_t selectAccelSensitivity);
 void ICM20948_getMagReading(I2C_HandleTypeDef * hi2c);
