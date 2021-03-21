@@ -95,6 +95,21 @@ HAL_StatusTypeDef _AK09918_ReadByte(I2C_HandleTypeDef * hi2c, uint8_t registerAd
 	return status;
 }
 
+HAL_StatusTypeDef _AK09918_BrustRead(I2C_HandleTypeDef * hi2c, bool altI2CAddr, uint8_t startAddress, uint8_t * readData, uint16_t amountOfRegistersToRead) {
+	HAL_StatusTypeDef status = HAL_OK;
+
+	status = HAL_I2C_Mem_Read(
+			hi2c,
+			AK09918__I2C_SLAVE_ADDRESS << 1,
+			startAddress,
+			I2C_MEMADD_SIZE_8BIT,
+			readData,
+			amountOfRegistersToRead,
+			10);
+
+	return status;
+}
+
 uint8_t ICM20948_IsI2cAddress1(I2C_HandleTypeDef * hi2c) {
 	HAL_StatusTypeDef addressStatus = HAL_I2C_IsDeviceReady(hi2c, ICM20948__I2C_SLAVE_ADDRESS_1 << 1, 2, 10);
 
@@ -249,25 +264,21 @@ void ICM20948_getAccelReading(I2C_HandleTypeDef * hi2c, bool altI2CAddr, uint8_t
 
 }
 
-void ICM20948_getMagReading(I2C_HandleTypeDef * hi2c) {
+void ICM20948_getMagReading(I2C_HandleTypeDef * hi2c, bool altI2CAddr) {
 	HAL_StatusTypeDef status = HAL_OK;
-	uint8_t readData = 0;
-	uint16_t magX = 0;
-	uint16_t magY = 0;
-	uint16_t magZ = 0;
+	uint8_t readData[6];
+	int16_t magX;
+	int16_t magY;
+	int16_t magZ;
 
-	status = _AK09918_ReadByte(hi2c, AK09916__XOUT_H__REGISTER , &readData);
-	magX = readData << 8;
-	status = _AK09918_ReadByte(hi2c, AK09916__XOUT_L__REGISTER , &readData);
-	magX |= readData;
+	status = _AK09918_BrustRead(hi2c, altI2CAddr, AK09916__XOUT_H__REGISTER, readData, 6);
 
-	status = _AK09918_ReadByte(hi2c, AK09916__YOUT_H__REGISTER , &readData);
-	magY = readData << 8;
-	status = _AK09918_ReadByte(hi2c, AK09916__YOUT_L__REGISTER , &readData);
-	magY |= readData;
+	magX = readData[0]<<8|readData[1];
+	magY = readData[2]<<8|readData[3];
+	magZ = readData[4]<<8|readData[5];
 
-	status = _AK09918_ReadByte(hi2c, AK09916__ZOUT_H__REGISTER , &readData);
-	magZ = readData << 8;
-	status = _AK09918_ReadByte(hi2c, AK09916__ZOUT_L__REGISTER , &readData);
-	magZ |= readData;
+	magX /= 4900;
+	magY /= 4900;
+	magZ /= 4900;
+
 }

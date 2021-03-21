@@ -1,4 +1,5 @@
-#include <ICM20948_headers/AK09918_ICM20948_register_addresses.h>
+#include <ICM20948_headers/ICM20948_register_addresses.h>
+#include <ICM20948_headers/AK09918_register_addresses.h>
 #include <ICM20948_headers/ICM20948_register_options.h>
 #include <stdbool.h>
 #include "stm32f4xx_hal.h"
