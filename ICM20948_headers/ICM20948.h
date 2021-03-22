@@ -51,7 +51,8 @@
 
 uint8_t ICM20948_isI2cAddress1(I2C_HandleTypeDef * hi2c);
 uint8_t ICM20948_isI2cAddress2(I2C_HandleTypeDef * hi2c);
-void ICM20948_init(I2C_HandleTypeDef * hi2c, uint8_t selectI2cAddress);
-void ICM20948_readGyroscope_allAxises(I2C_HandleTypeDef * hi2c, uint8_t selectI2cAddress, uint8_t selectGyroSensitivity, int16_t readings[3]);
-void ICM20948_readAccelerometer_allAxises(I2C_HandleTypeDef * hi2c, uint8_t selectI2cAddress, uint8_t selectAccelSensitivity, int16_t readings[3]);
+void ICM20948_init(I2C_HandleTypeDef * hi2c, uint8_t const selectI2cAddress);
+void ICM20948_readGyroscope_allAxises(I2C_HandleTypeDef * hi2c, uint8_t const selectI2cAddress, uint8_t const selectGyroSensitivity, int16_t readings[3]);
+void ICM20948_readTemperature(I2C_HandleTypeDef * hi2c, uint8_t const selectI2cAddress, int16_t * reading);
+void ICM20948_readAccelerometer_allAxises(I2C_HandleTypeDef * hi2c, uint8_t const selectI2cAddress, uint8_t const selectAccelSensitivity, int16_t readings[3]);
 void ICM20948_readMagnetometer_allAxises(I2C_HandleTypeDef * hi2c, int16_t readings[3]);
