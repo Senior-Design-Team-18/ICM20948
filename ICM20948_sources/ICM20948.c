@@ -14,6 +14,8 @@
 #define T_HIGH_BYTE 0
 #define T_LOW_BYTE 1
 
+#define ONE_BYTE 8
+
 #define GRYO_SENSITIVITY_SCALE_FACTOR_250DPS 131
 #define GRYO_SENSITIVITY_SCALE_FACTOR_500DPS 65.5
 #define GRYO_SENSITIVITY_SCALE_FACTOR_1000DPS 32.8
@@ -202,7 +204,7 @@ void ICM20948_init(I2C_HandleTypeDef * hi2c, uint8_t const selectI2cAddress) {
 
 	status = _ICM20948_SelectUserBank(hi2c, selectI2cAddress, USER_BANK_0);
 
-	status = _ICM20948_WriteByte(
+  status = _ICM20948_WriteByte(
 			hi2c,
 			selectI2cAddress,
 			ICM20948__USER_BANK_0__INT_PIN_CFG__REGISTER,
@@ -304,8 +306,7 @@ void ICM20948_readMagnetometer_allAxises(I2C_HandleTypeDef * hi2c, int16_t readi
 	readings[Y] = readData[Y_HIGH_BYTE]<<8|readData[Y_LOW_BYTE];
 	readings[Z] = readData[Z_HIGH_BYTE]<<8|readData[Z_LOW_BYTE];
 
-	readings[X] /= MAG_SENSITIVITY_SCALE_FACTOR;
-	readings[Y] /= MAG_SENSITIVITY_SCALE_FACTOR;
-	readings[Z] /= MAG_SENSITIVITY_SCALE_FACTOR;
-
+	readings[X] *= MAG_SENSITIVITY_SCALE_FACTOR;
+	readings[Y] *= MAG_SENSITIVITY_SCALE_FACTOR;
+	readings[Z] *= MAG_SENSITIVITY_SCALE_FACTOR;
 }
